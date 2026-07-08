@@ -1,5 +1,4 @@
 import pandas as pd
-import yaml
 
 
 class ModeFlappingDetector:
@@ -12,27 +11,39 @@ class ModeFlappingDetector:
         device_col = self.config["device_column"]
         mode_col = self.config["network_mode_column"]
 
-        anomalies = []
+        threshold = self.config["max_transitions"]
 
-        grouped = df.groupby(device_col)
+        output = df.copy()
 
-        for device_id, device_data in grouped:
+        output["Anomaly"] = "No"
+        output["Reason"] = "Transition count within threshold"
+        output["Severity"] = "Low"
+
+        for device_id, group in output.groupby(device_col):
 
             transitions = (
-                device_data[mode_col]
-                != device_data[mode_col].shift()
+                group[mode_col] != group[mode_col].shift()
             ).sum() - 1
 
             transitions = max(transitions, 0)
 
-            if transitions >= self.config["max_transitions"]:
+            if transitions >= threshold:
 
-                anomalies.append({
-                    "device_id": device_id,
-                    "anomaly_type": self.config["anomaly_name"],
-                    "severity": self.config["severity"],
-                    "transition_count": transitions,
-                    "status": "Detected"
-                })
+                indices = group.index
 
-        return pd.DataFrame(anomalies)
+                output.loc[indices, "Anomaly"] = "Yes"
+
+                output.loc[
+                    indices,
+                    "Reason"
+                ] = (
+                    f"{transitions} network mode "
+                    f"transitions detected."
+                )
+
+                output.loc[
+                    indices,
+                    "Severity"
+                ] = "High"
+
+        return output
