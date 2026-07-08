@@ -1,14 +1,23 @@
+import yaml
 import pandas as pd
-from anomaly_detector import detect_mode_flapping
 
+from anomaly_detector import ModeFlappingDetector
+
+
+with open("config/config.yaml") as file:
+    config = yaml.safe_load(file)
 
 df = pd.read_csv("data/telecom_data.csv")
 
-flag, transitions = detect_mode_flapping(df)
+detector = ModeFlappingDetector(config)
 
-if flag:
-    print("MODE FLAPPING DETECTED")
-    print("Transitions:", transitions)
+result = detector.detect(df)
 
-else:
-    print("No anomaly detected")
+result.to_csv(
+    "output/anomaly_report.csv",
+    index=False
+)
+
+print(
+    f"Detected {len(result)} mode flapping anomalies."
+)
