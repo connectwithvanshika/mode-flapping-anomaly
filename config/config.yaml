@@ -1,15 +1,7 @@
 mode_flapping:
 
-  enabled: true
-
-  # dataset columns
+  device_column: "DEVICE_ID"
   timestamp_column: "TIMESTAMP"
-  device_column: "ID"
   network_mode_column: "NetworkMode"
 
-  # rule parameters
-  window_minutes: 5
   max_transitions: 4
-
-  anomaly_name: "Mode Flapping"
-  severity: "High"
