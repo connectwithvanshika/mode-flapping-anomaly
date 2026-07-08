@@ -7,7 +7,7 @@ from anomaly_detector import ModeFlappingDetector
 with open("config/config.yaml") as file:
     config = yaml.safe_load(file)
 
-df = pd.read_csv("data/telecom_data.csv")
+df = pd.read_csv("data/Telemetry Data.csv")
 
 detector = ModeFlappingDetector(config)
 
