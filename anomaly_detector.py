@@ -1,18 +1,38 @@
 import pandas as pd
+import yaml
 
 
-def detect_mode_flapping(df,
-                          mode_column="NetworkMode",
-                          threshold=4):
+class ModeFlappingDetector:
 
-    transitions = 0
-    previous_mode = None
+    def __init__(self, config):
+        self.config = config["mode_flapping"]
 
-    for mode in df[mode_column]:
+    def detect(self, df):
 
-        if previous_mode is not None and mode != previous_mode:
-            transitions += 1
+        device_col = self.config["device_column"]
+        mode_col = self.config["network_mode_column"]
 
-        previous_mode = mode
+        anomalies = []
 
-    return transitions >= threshold, transitions
+        grouped = df.groupby(device_col)
+
+        for device_id, device_data in grouped:
+
+            transitions = (
+                device_data[mode_col]
+                != device_data[mode_col].shift()
+            ).sum() - 1
+
+            transitions = max(transitions, 0)
+
+            if transitions >= self.config["max_transitions"]:
+
+                anomalies.append({
+                    "device_id": device_id,
+                    "anomaly_type": self.config["anomaly_name"],
+                    "severity": self.config["severity"],
+                    "transition_count": transitions,
+                    "status": "Detected"
+                })
+
+        return pd.DataFrame(anomalies)
