@@ -1,0 +1,78 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual Environments
+# =========================
+venv/
+env/
+.venv/
+ENV/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# MacOS
+# =========================
+.DS_Store
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Data Files
+# =========================
+data/*
+!data/.gitkeep
+
+# Large compressed datasets
+*.csv
+*.csv.gz
+*.parquet
+*.feather
+
+# =========================
+# Generated Outputs
+# =========================
+output/*
+!output/.gitkeep
+
+# Generated reports
+anomaly_report.csv
+report.csv
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# Python Cache
+# =========================
+.pytest_cache/
+.mypy_cache/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+
+# =========================
+# System Files
+# =========================
+Thumbs.db
