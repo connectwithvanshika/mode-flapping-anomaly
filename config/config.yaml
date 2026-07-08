@@ -1,0 +1,15 @@
+mode_flapping:
+
+  enabled: true
+
+  device_column: "IMSI"
+
+  timestamp_column: "TIMESTAMP"
+
+  mode_column: "NetworkMode"
+
+  window_minutes: 5
+
+  max_transitions: 4
+
+  anomaly_name: "Mode Flapping"
